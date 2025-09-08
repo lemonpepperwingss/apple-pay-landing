@@ -26,24 +26,27 @@
   <meta name="twitter:title" content="Apple Pay Reward Offer - RewardUp">
   <meta name="twitter:description" content="Get up to $800 in Apple Pay rewards by completing simple offers. Free to start, no credit card required.">
 
-  <!-- META PIXEL TRACKING -->
+  <!-- META PIXEL TRACKING - Deferred for performance -->
   <script>
-    !function(f,b,e,v,n,t,s){
-      if(f.fbq)return;n=f.fbq=function(){
-        n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments)
-      };
-      if(!f._fbq)f._fbq=n;
-      n.push=n;
-      n.loaded=!0;
-      n.version='2.0';
-      n.queue=[];
-      t=b.createElement(e);t.async=!0;t.src=v;
-      s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)
-    }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    // Defer Facebook Pixel loading
+    window.addEventListener('load', function() {
+      !function(f,b,e,v,n,t,s){
+        if(f.fbq)return;n=f.fbq=function(){
+          n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments)
+        };
+        if(!f._fbq)f._fbq=n;
+        n.push=n;
+        n.loaded=!0;
+        n.version='2.0';
+        n.queue=[];
+        t=b.createElement(e);t.async=!0;t.src=v;
+        s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)
+      }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-    fbq('init','2324406347952889');
-    fbq('track','PageView');
+      fbq('init','2324406347952889');
+      fbq('track','PageView');
+    });
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
@@ -120,14 +123,16 @@
       50% { transform: translateY(-10px); }
     }
 
-
-    /* Hero image */
+    /* Hero image - PERFORMANCE OPTIMIZED */
     .hero-image {
       width: 100%;
+      height: 240px; /* Fixed height to prevent layout shift */
       border-radius: 20px 20px 0 0;
       display: block;
       margin-bottom: 0;
       box-shadow: 0 4px 12px var(--shadow-color);
+      object-fit: cover; /* Prevent layout shift */
+      background-color: #f0f0f0; /* Placeholder color */
     }
 
     /* Progress bar */
@@ -588,11 +593,15 @@
 
   <div class="landing-container">
 
-    <!-- Hero image -->
+    <!-- Hero image - PERFORMANCE OPTIMIZED -->
     <img
       class="hero-image"
       src="applepay.png"
       alt="Apple Pay $750 Reward"
+      width="480"
+      height="240"
+      fetchpriority="high"
+      loading="eager"
     />
 
     <!-- Progress bar -->
@@ -685,7 +694,7 @@
 
       <div class="testimonial-card">
         <div class="testimonial-header">
-          <img src="https://img.funnelish.com/69400/818190/1751222976-Random%20User%20Photo%20%281%29.jpg" alt="Profile" class="testimonial-avatar">
+          <img src="https://img.funnelish.com/69400/818190/1751222976-Random%20User%20Photo%20%281%29.jpg" alt="Profile" class="testimonial-avatar" loading="lazy">
           <div class="testimonial-info">
             <div class="testimonial-username">@sarah_achiever</div>
             <div class="testimonial-time">2h ago</div>
@@ -708,7 +717,7 @@
 
       <div class="testimonial-card">
         <div class="testimonial-header">
-          <img src="https://img.funnelish.com/69400/818190/1751222979-Random%20User%20Photo%2082.jpg" alt="Profile" class="testimonial-avatar">
+          <img src="https://img.funnelish.com/69400/818190/1751222979-Random%20User%20Photo%2082.jpg" alt="Profile" class="testimonial-avatar" loading="lazy">
           <div class="testimonial-info">
             <div class="testimonial-username">@emma_davis</div>
             <div class="testimonial-time">5h ago</div>
@@ -731,7 +740,7 @@
 
       <div class="testimonial-card">
         <div class="testimonial-header">
-          <img src="https://img.funnelish.com/69400/818190/1751222981-Random%20User%20Photo.jpg" alt="Profile" class="testimonial-avatar">
+          <img src="https://img.funnelish.com/69400/818190/1751222981-Random%20User%20Photo.jpg" alt="Profile" class="testimonial-avatar" loading="lazy">
           <div class="testimonial-info">
             <div class="testimonial-username">@mikejohnson_22</div>
             <div class="testimonial-time">1d ago</div>
@@ -766,7 +775,7 @@
   </div>
 
   <script>
-    // Enhanced notification system
+    // PERFORMANCE OPTIMIZED - Defer heavy operations
     (function() {
       'use strict';
       
@@ -821,16 +830,15 @@
         }, 5000);
       }
       
-      
-      // Particle animation system
+      // OPTIMIZED Particle animation system - Reduced complexity
       function initParticles() {
         const canvas = document.getElementById('particles-js');
         if (!canvas) return;
         
         const ctx = canvas.getContext('2d');
         const particles = [];
-        const particleCount = 12;
-        const maxDistance = 100;
+        const particleCount = 8; // Reduced from 12
+        const maxDistance = 80; // Reduced from 100
         const mousePos = { x: null, y: null };
         
         function setCanvasSize() {
@@ -839,20 +847,31 @@
         }
         
         setCanvasSize();
-        window.addEventListener('resize', setCanvasSize);
         
+        // Throttled resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(setCanvasSize, 100);
+        });
+        
+        // Throttled mousemove handler
+        let mouseTimeout;
         window.addEventListener('mousemove', (e) => {
-          mousePos.x = e.clientX;
-          mousePos.y = e.clientY;
+          clearTimeout(mouseTimeout);
+          mouseTimeout = setTimeout(() => {
+            mousePos.x = e.clientX;
+            mousePos.y = e.clientY;
+          }, 16); // ~60fps
         });
         
         class Particle {
           constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * 0.6;
-            this.vy = (Math.random() - 0.5) * 0.6;
-            this.radius = 2;
+            this.vx = (Math.random() - 0.5) * 0.4; // Reduced speed
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.radius = 1.5; // Reduced size
           }
           
           update() {
@@ -867,10 +886,10 @@
               const dy = this.y - mousePos.y;
               const distance = Math.sqrt(dx * dx + dy * dy);
               
-              if (distance < 80) {
-                const force = (80 - distance) / 80;
-                this.x += dx * force * 0.015;
-                this.y += dy * force * 0.015;
+              if (distance < 60) { // Reduced interaction distance
+                const force = (60 - distance) / 60;
+                this.x += dx * force * 0.01; // Reduced force
+                this.y += dy * force * 0.01;
               }
             }
           }
@@ -889,7 +908,7 @@
         
         let animationId;
         let lastTime = 0;
-        const targetFPS = 30;
+        const targetFPS = 24; // Reduced from 30
         const frameInterval = 1000 / targetFPS;
         
         function animate(currentTime) {
@@ -900,8 +919,8 @@
               particle.update();
               particle.draw();
               
-              // Only check connections for every other particle to improve performance
-              if (i % 2 === 0) {
+              // Only check connections for every 3rd particle to improve performance
+              if (i % 3 === 0) {
                 for (let j = i + 1; j < particles.length; j++) {
                   const otherParticle = particles[j];
                   const dx = particle.x - otherParticle.x;
@@ -912,9 +931,9 @@
                     ctx.beginPath();
                     ctx.moveTo(particle.x, particle.y);
                     ctx.lineTo(otherParticle.x, otherParticle.y);
-                    const opacity = (1 - distance / maxDistance) * 0.15;
+                    const opacity = (1 - distance / maxDistance) * 0.1; // Reduced opacity
                     ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`;
-                    ctx.lineWidth = 0.6;
+                    ctx.lineWidth = 0.4; // Reduced line width
                     ctx.stroke();
                   }
                 }
@@ -969,25 +988,28 @@
         });
       }
       
-      // Initialize everything
+      // Initialize everything - DEFERRED for performance
       function init() {
         try {
-          const cleanupParticles = initParticles();
+          // Defer particle animation until after page load
+          setTimeout(() => {
+            const cleanupParticles = initParticles();
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', () => {
+              if (cleanupParticles) cleanupParticles();
+            });
+          }, 1000);
           
           // TikTok WebView optimizations
           setupTikTokWebViewOptimization();
           
-          // Start notification systems
-          
+          // Defer notification system
           setTimeout(() => {
             createMobileNotification();
             setInterval(createMobileNotification, Math.random() * 6000 + 12000);
-          }, 5000);
+          }, 3000);
           
-          // Cleanup on page unload
-          window.addEventListener('beforeunload', () => {
-            if (cleanupParticles) cleanupParticles();
-          });
         } catch (error) {
           console.warn('Initialization error:', error);
         }
