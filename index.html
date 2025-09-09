@@ -26,39 +26,6 @@
   <meta name="twitter:title" content="Apple Pay Reward Offer - RewardUp">
   <meta name="twitter:description" content="Get up to $800 in Apple Pay rewards by completing simple offers. Free to start, no credit card required.">
 
-  <!--Optional, send client hints to get accurate device data-->
-  <meta http-equiv="delegate-ch" content="sec-ch-ua http://payrewards.enhalenow.com; sec-ch-ua-mobile http://payrewards.enhalenow.com; sec-ch-ua-arch http://payrewards.enhalenow.com; sec-ch-ua-model http://payrewards.enhalenow.com; sec-ch-ua-platform http://payrewards.enhalenow.com; sec-ch-ua-platform-version http://payrewards.enhalenow.com; sec-ch-ua-bitness http://payrewards.enhalenow.com; sec-ch-ua-full-version-list http://payrewards.enhalenow.com; sec-ch-ua-full-version http://payrewards.enhalenow.com" />
-
-  <!-- MaxConv Tracking Script Base Code-->
-  <script>!function(w,d,o,n,c){w[o]=w[o]||function(){(w[o].q=w[o].q||[]).push(arguments)};var s=d.createElement(n),t=d.getElementsByTagName(n)[0];s.async=!0;s.defer=!0;s.src="//payrewards.enhalenow.com/t/t.js";t.parentNode.insertBefore(s,t);}(window,document,"maxconv","script");</script>
-  <noscript><link rel="stylesheet" href="//payrewards.enhalenow.com/t/t.css?mc_ns=1" /></noscript>
-  <!-- End MaxConv Tracking Script Base Code-->
-  
-  <!-- Debug MaxConv Tracking -->
-  <script>
-    console.log('MaxConv tracking script loaded');
-    if (typeof maxconv !== 'undefined') {
-      console.log('MaxConv object available:', maxconv);
-    } else {
-      console.log('MaxConv object not available yet');
-    }
-    
-    // Check if tracking script loaded
-    window.addEventListener('load', function() {
-      console.log('Page loaded, checking MaxConv...');
-      if (typeof maxconv !== 'undefined') {
-        console.log('MaxConv loaded successfully');
-        // Try to trigger a page view
-        if (typeof maxconv.track === 'function') {
-          maxconv.track('pageview');
-          console.log('Page view tracked');
-        }
-      } else {
-        console.error('MaxConv not loaded after page load');
-      }
-    });
-  </script>
-
   <!-- META PIXEL TRACKING - Deferred for performance -->
   <script>
     // Defer Facebook Pixel loading
@@ -700,9 +667,9 @@
       </div>
     </div>
 
-    <!-- CTA Button -->
+    <!-- CTA Button with cache buster -->
     <a
-      href="http://payrewards.enhalenow.com/click"
+      href="https://cycsrd.mcgo2.com/click" + Date.now()
       class="cta-button"
       onclick="fbq('track', 'Lead');"
     >
@@ -710,7 +677,7 @@
     </a>
 
     <!-- Form fallback CTA for TikTok WebView reliability -->
-    <form action="http://payrewards.enhalenow.com/click" method="get" class="cta-form" id="fallback-cta">
+    <form action="https://cycsrd.mcgo2.com/click" method="get" class="cta-form" id="fallback-cta">
       <input type="hidden" name="cb" value="APPLEPAY">
       <input type="hidden" name="t" value="" id="timestamp">
       <button type="submit" class="cta-form-button" onclick="fbq('track', 'Lead');">
